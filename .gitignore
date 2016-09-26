@@ -1,0 +1,21 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.idea
+/Concurrency/Concurrency.iml
+/Concurrency/RMI.iml
+/MagicSquares/src/main/java/net/anotheria/strel/basic/magicsquares/itworks/
+/MagicSquares/src/main/java/net/anotheria/strel/basic/magicsquares/specialcases/
+/QueensProblem/src/main/java/net/anotheria/strel/basic/queenproblem/old/
+/DistributeMe/DistributeMe.iml
+/DistributeMe/target/
+/FileTransferServer/FileTransferServer.iml
+/HibernateMagicSquares/HibernateMagicSquares.iml
+/JdbcQueensProblem/JdbcQueensProblem.iml
+/KnightsTourProblem/KnightsTourProblem.iml
+/MagicSquares/MagicSquares.iml
+/MagicSquaresService/MagicSquaresService.iml
+/NetworkBasics/NetworkBasics.iml
+/QueensProblem/QueensProblem.iml
+/RmiEchoClient/RmiEchoClient.iml
+/RmiEchoService/RmiEchoService.iml
+/Concurrency/.idea/
+/MagicSquares.txt

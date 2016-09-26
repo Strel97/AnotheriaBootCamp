@@ -1,0 +1,6 @@
+{
+  host: "localhost",
+  dbName: "queensdb",
+  userName: "strel",
+  password: "28021997"
+}
