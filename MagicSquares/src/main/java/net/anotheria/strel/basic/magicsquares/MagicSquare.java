@@ -1,6 +1,9 @@
 package net.anotheria.strel.basic.magicsquares;
 
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Represents magic square. Contains methods for
  * converting square to string (for further outputting
@@ -8,16 +11,19 @@ package net.anotheria.strel.basic.magicsquares;
  *
  * @author Strel97
  */
+@XmlRootElement
 public class MagicSquare {
 
     /**
      * Size of square
      */
+    @XmlElement
     private int size;
 
     /**
      * Values of square in form of string
      */
+    @XmlElement
     private String  square;
 
     /**

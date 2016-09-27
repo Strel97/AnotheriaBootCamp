@@ -32,16 +32,20 @@ public class MagicSquaresResource {
         return squaresManager.getSquareById(id);
     }
 
-    @DELETE
+    @GET
     @Path("delete")
-    public void deleteAllMagicSquares() {
-        squaresManager.deleteSquares();
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteAllMagicSquares() {
+        int deletedSquares = squaresManager.deleteSquares();
+        return String.format("Successfully deleted %d squares", deletedSquares);
     }
 
-    @DELETE
+    @GET
     @Path("delete/{id}")
-    public void deleteMagicSquareById(@PathParam("id") int id) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteMagicSquareById(@PathParam("id") int id) {
         squaresManager.deleteSquareById(id);
+        return String.format("Square with id=%d was deleted from database", id);
     }
 
     @GET
@@ -52,6 +56,14 @@ public class MagicSquaresResource {
         squaresManager.saveAllSquares(squares);
 
         return squares;
+    }
+
+    @GET
+    @Path("update/{size}")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<MagicSquare> updateMagicSquares(@PathParam("size") int size) {
+        deleteAllMagicSquares();
+        return createMagicSquares(size);
     }
 
     @GET

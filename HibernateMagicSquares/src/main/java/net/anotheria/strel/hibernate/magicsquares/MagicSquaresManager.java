@@ -93,14 +93,16 @@ public class MagicSquaresManager {
 
     /**
      * Deletes all squares from database.
+     * @return Records deleted
      */
-    public void deleteSquares() {
+    public int deleteSquares() {
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
             int recordsDeleted = session.createQuery("delete from MagicSquareEntity").executeUpdate();
             transaction.commit();
 
             log.info(String.format("Deleted %d squares.", recordsDeleted));
+            return recordsDeleted;
         }
         catch (HibernateException ex) {
             if (transaction != null)
@@ -108,6 +110,8 @@ public class MagicSquaresManager {
 
             log.error("Failed to delete squares: " + ex.getMessage());
         }
+
+        return 0;
     }
 
     /**
@@ -156,7 +160,7 @@ public class MagicSquaresManager {
     public List<MagicSquare> findSquares(String pattern) {
         try (Session session = factory.openSession()) {
             return castList( session.createQuery("from MagicSquareEntity where square like :pattern")
-                    .setParameter("pattern", pattern).list() );
+                    .setParameter("pattern", '%' + pattern + '%').list() );
         }
     }
 
