@@ -4,7 +4,7 @@ package net.anotheria.strel.rest;
 import net.anotheria.moskito.aop.annotation.Monitor;
 import net.anotheria.strel.basic.magicsquares.MagicSquare;
 import net.anotheria.strel.basic.magicsquares.MagicSquareBuilder;
-import net.anotheria.strel.hibernate.magicsquares.MagicSquaresManager;
+import net.anotheria.strel.hibernate.magicsquares.HibernateMagicSquareManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,7 +17,7 @@ import java.util.List;
 @Path("magic")
 public class MagicSquaresResource {
 
-    private MagicSquaresManager squaresManager = new MagicSquaresManager();
+    private HibernateMagicSquareManager squaresManager = new HibernateMagicSquareManager();
 
 
     @GET

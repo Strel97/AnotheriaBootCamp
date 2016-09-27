@@ -12,7 +12,7 @@ import java.util.List;
 public class HibernateLauncher {
 
     public static void main(String[] args) {
-        MagicSquaresManager manager = new MagicSquaresManager();
+        HibernateMagicSquareManager manager = new HibernateMagicSquareManager();
         MagicSquareBuilder builder = new MagicSquareBuilder(3);
 
         // Saving solutions

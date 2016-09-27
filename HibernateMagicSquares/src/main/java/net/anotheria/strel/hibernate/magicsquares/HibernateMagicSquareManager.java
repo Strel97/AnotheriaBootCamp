@@ -17,15 +17,15 @@ import java.util.List;
  * Used for operating database where all magic squares are stored.
  * @author Strel97
  */
-public class MagicSquaresManager implements MagicSquareDao {
+public class HibernateMagicSquareManager implements MagicSquareDao {
 
     private SessionFactory factory;
     private Transaction transaction;
 
-    private Logger log = Logger.getLogger(MagicSquaresManager.class);
+    private Logger log = Logger.getLogger(HibernateMagicSquareManager.class);
 
 
-    public MagicSquaresManager() {
+    public HibernateMagicSquareManager() {
         BasicConfigurator.configure();
 
         try {

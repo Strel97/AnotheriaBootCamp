@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Repository
 @Transactional
-public class HibernateMagicSquareDao implements MagicSquareDao {
+public class SpringHibernateMagicSquareManager implements MagicSquareDao {
     @Autowired
     SessionFactory sessionFactory;
 
