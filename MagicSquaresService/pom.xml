@@ -6,7 +6,7 @@
 
     <groupId>net.anotheria.strel.rest</groupId>
     <artifactId>MagicSquaresService</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>1.0</version>
     <name>MagicSquaresService</name>
 
@@ -23,9 +23,17 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-grizzly2-http</artifactId>
+            <version>${jersey.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
@@ -59,9 +67,26 @@
             <artifactId>MagicSquares</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>moskito-core</artifactId>
+            <version>${moskito.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>moskito-aop</artifactId>
+            <version>${moskito.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>moskito-inspect-remote</artifactId>
+            <version>${moskito.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>MagicSquaresService</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -73,6 +98,8 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -85,14 +112,41 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>net.anotheria.strel.net.anotheria.strel.rest.Main</mainClass>
+                    <mainClass>net.anotheria.strel.net.anotheria.strel.rest.GrizzlyServerLauncher</mainClass>
                 </configuration>
             </plugin>
+            -->
+
+            <!--
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.8</version>
+                <configuration>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>net.anotheria</groupId>
+                            <artifactId>moskito-aop</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
         </plugins>
     </build>
 
     <properties>
         <jersey.version>2.23.2</jersey.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <moskito.version>2.7.6</moskito.version>
     </properties>
 </project>

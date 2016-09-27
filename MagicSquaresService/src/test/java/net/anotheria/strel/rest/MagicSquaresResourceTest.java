@@ -24,17 +24,17 @@ public class MagicSquaresResourceTest {
     @Before
     public void setUp() throws Exception {
         // start the server
-        server = Main.startServer();
+        server = GrizzlyServerLauncher.startServer();
         // create the client
         Client c = ClientBuilder.newClient();
 
         // uncomment the following line if you want to enable
         // support for JSON in the client (you also have to uncomment
-        // dependency on jersey-media-json module in pom.xml and Main.startServer())
+        // dependency on jersey-media-json module in pom.xml and GrizzlyServerLauncher.startServer())
         // --
         // c.configuration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
 
-        target = c.target(Main.BASE_URI);
+        target = c.target(GrizzlyServerLauncher.BASE_URI);
     }
 
     @After
@@ -42,19 +42,9 @@ public class MagicSquaresResourceTest {
         server.stop();
     }
 
-    /**
-     * Test to see that the message "Got it!" is sent in the response.
-     */
-    @Test
-    public void testGetIt() {
-        String responseMsg = target.path("myresource").request().get(String.class);
-        assertEquals("Got it!", responseMsg);
-    }
-
     @Test
     public void getMagicSquares() {
-        List<MagicSquare> squares = target.path("magicsquare").request().get(new GenericType<List<MagicSquare>>() {});
-        System.out.println(squares);
+
     }
 
     @Test

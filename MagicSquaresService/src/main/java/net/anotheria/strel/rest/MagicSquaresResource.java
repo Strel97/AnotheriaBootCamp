@@ -1,6 +1,7 @@
 package net.anotheria.strel.rest;
 
 
+import net.anotheria.moskito.aop.annotation.Monitor;
 import net.anotheria.strel.basic.magicsquares.MagicSquare;
 import net.anotheria.strel.basic.magicsquares.MagicSquareBuilder;
 import net.anotheria.strel.hibernate.magicsquares.MagicSquaresManager;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Root resource (exposed at "magic" path)
  */
+@Monitor
 @Path("magic")
 public class MagicSquaresResource {
 
