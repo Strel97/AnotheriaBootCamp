@@ -38,7 +38,7 @@ public class MagicSquaresResource {
     @Path("delete")
     @Produces(MediaType.TEXT_PLAIN)
     public String deleteAllMagicSquares() {
-        int deletedSquares = squaresManager.deleteSquares();
+        int deletedSquares = squaresManager.deleteAllSquares();
         return String.format("Successfully deleted %d squares", deletedSquares);
     }
 
@@ -55,7 +55,7 @@ public class MagicSquaresResource {
     @Produces(MediaType.APPLICATION_XML)
     public List<MagicSquare> createMagicSquares(@PathParam("size") int size) {
         List<MagicSquare> squares = new MagicSquareBuilder(size).buildMagicSquares();
-        squaresManager.saveAllSquares(squares);
+        squaresManager.saveSquares(squares);
 
         return squares;
     }

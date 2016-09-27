@@ -18,7 +18,7 @@ public class HibernateLauncher {
         // Saving solutions
         List<MagicSquare> solutions = builder.buildMagicSquares();
         for (MagicSquare solution : solutions) {
-            manager.saveSolution(solution);
+            manager.saveSquare(solution);
         }
 
         // Retrieving first square (square with id 1)
@@ -40,7 +40,7 @@ public class HibernateLauncher {
         }
 
         // Deleting solutions
-        manager.deleteSquares();
+        manager.deleteAllSquares();
 
         manager.stop();
     }

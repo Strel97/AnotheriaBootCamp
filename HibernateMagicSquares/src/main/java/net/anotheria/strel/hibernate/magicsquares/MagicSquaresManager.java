@@ -1,6 +1,7 @@
 package net.anotheria.strel.hibernate.magicsquares;
 
 import net.anotheria.strel.basic.magicsquares.MagicSquare;
+import net.anotheria.strel.databases.MagicSquareDao;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -8,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  * Used for operating database where all magic squares are stored.
  * @author Strel97
  */
-public class MagicSquaresManager {
+public class MagicSquaresManager implements MagicSquareDao {
 
     private SessionFactory factory;
     private Transaction transaction;
@@ -38,16 +38,15 @@ public class MagicSquaresManager {
     /**
      * Saves {@link MagicSquare} to database.
      * @param square    Square to save
-     * @return          Id of record in database
      */
-    public Integer saveSolution(MagicSquare square) {
+    @Override
+    public void saveSquare(MagicSquare square) {
 
         Transaction transaction = null;
-        Integer squareID = null;
 
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            squareID = (Integer) session.save(new MagicSquareEntity(square));
+            session.save(new MagicSquareEntity(square));
             transaction.commit();
         } catch (HibernateException ex) {
             if (transaction != null)
@@ -55,8 +54,6 @@ public class MagicSquaresManager {
 
             log.error("Failed to process save transaction: " + ex);
         }
-
-        return squareID;
     }
 
     /**
@@ -65,7 +62,8 @@ public class MagicSquaresManager {
      *
      * @param squares   List of squares
      */
-    public void saveAllSquares(List<MagicSquare> squares) {
+    @Override
+    public void saveSquares(List<MagicSquare> squares) {
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
             for (MagicSquare square : squares) {
@@ -85,6 +83,8 @@ public class MagicSquaresManager {
      * Returns all squares from database in form of list.
      * @return  List of {@link MagicSquare}
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public List<MagicSquare> getAllSquares() {
         try (Session session = factory.openSession()) {
             return castList( session.createQuery("from MagicSquareEntity").list() );
@@ -95,7 +95,8 @@ public class MagicSquaresManager {
      * Deletes all squares from database.
      * @return Records deleted
      */
-    public int deleteSquares() {
+    @Override
+    public int deleteAllSquares() {
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
             int recordsDeleted = session.createQuery("delete from MagicSquareEntity").executeUpdate();
@@ -119,10 +120,11 @@ public class MagicSquaresManager {
      * @param squareId  Square id
      * @return          {@link MagicSquare}
      */
+    @Override
     public MagicSquare getSquareById(int squareId) {
         try (Session session = factory.openSession()) {
             MagicSquareEntity entity = session.get(MagicSquareEntity.class, squareId);
-            return entity == null ? null : entity.createSquare();
+            return entity != null ? entity.createSquare() : null;
         }
     }
 
@@ -130,6 +132,7 @@ public class MagicSquaresManager {
      * Deletes square with given id from database.
      * @param squareId  Square id
      */
+    @Override
     public void deleteSquareById(int squareId) {
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
@@ -157,6 +160,8 @@ public class MagicSquaresManager {
      * @param pattern   Square pattern
      * @return          List of {@link MagicSquare}
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public List<MagicSquare> findSquares(String pattern) {
         try (Session session = factory.openSession()) {
             return castList( session.createQuery("from MagicSquareEntity where square like :pattern")
