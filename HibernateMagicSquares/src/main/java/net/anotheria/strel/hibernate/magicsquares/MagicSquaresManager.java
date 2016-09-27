@@ -8,18 +8,20 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Used for operating database where all magic squares are stored.
- *
  * @author Strel97
  */
 public class MagicSquaresManager {
 
     private SessionFactory factory;
     private Transaction transaction;
+
     private Logger log = Logger.getLogger(MagicSquaresManager.class);
 
 
@@ -45,7 +47,7 @@ public class MagicSquaresManager {
 
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            squareID = (Integer) session.save(square);
+            squareID = (Integer) session.save(new MagicSquareEntity(square));
             transaction.commit();
         } catch (HibernateException ex) {
             if (transaction != null)
@@ -57,11 +59,17 @@ public class MagicSquaresManager {
         return squareID;
     }
 
+    /**
+     * Saves all {@link MagicSquare} from the list
+     * to database.
+     *
+     * @param squares   List of squares
+     */
     public void saveAllSquares(List<MagicSquare> squares) {
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
             for (MagicSquare square : squares) {
-                session.save(square);
+                session.save(new MagicSquareEntity(square));
             }
             transaction.commit();
         }
@@ -73,16 +81,23 @@ public class MagicSquaresManager {
         }
     }
 
+    /**
+     * Returns all squares from database in form of list.
+     * @return  List of {@link MagicSquare}
+     */
     public List<MagicSquare> getAllSquares() {
         try (Session session = factory.openSession()) {
-            return (List<MagicSquare>) session.createQuery("from MagicSquare").list();
+            return castList( session.createQuery("from MagicSquareEntity").list() );
         }
     }
 
+    /**
+     * Deletes all squares from database.
+     */
     public void deleteSquares() {
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            int recordsDeleted = session.createQuery("delete from MagicSquare").executeUpdate();
+            int recordsDeleted = session.createQuery("delete from MagicSquareEntity").executeUpdate();
             transaction.commit();
 
             log.info(String.format("Deleted %d squares.", recordsDeleted));
@@ -95,16 +110,26 @@ public class MagicSquaresManager {
         }
     }
 
+    /**
+     * Obtains square with given id from database and returns it.
+     * @param squareId  Square id
+     * @return          {@link MagicSquare}
+     */
     public MagicSquare getSquareById(int squareId) {
         try (Session session = factory.openSession()) {
-            return session.get(MagicSquare.class, squareId);
+            MagicSquareEntity entity = session.get(MagicSquareEntity.class, squareId);
+            return entity == null ? null : entity.createSquare();
         }
     }
 
+    /**
+     * Deletes square with given id from database.
+     * @param squareId  Square id
+     */
     public void deleteSquareById(int squareId) {
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
-            MagicSquare square = session.get(MagicSquare.class, squareId);
+            MagicSquareEntity square = session.get(MagicSquareEntity.class, squareId);
 
             if (square != null) {
                 session.delete(square);
@@ -121,10 +146,17 @@ public class MagicSquaresManager {
         }
     }
 
+    /**
+     * Finds all squares by given pattern. Comparison is done by
+     * values of square.
+     *
+     * @param pattern   Square pattern
+     * @return          List of {@link MagicSquare}
+     */
     public List<MagicSquare> findSquares(String pattern) {
         try (Session session = factory.openSession()) {
-            return session.createQuery("from MagicSquare s where str(s.square) like :pattern")
-                    .setParameter("pattern", pattern + "%").list();
+            return castList( session.createQuery("from MagicSquareEntity where square like :pattern")
+                    .setParameter("pattern", pattern).list() );
         }
     }
 
@@ -133,5 +165,21 @@ public class MagicSquaresManager {
      */
     public void stop() {
         factory.close();
+    }
+
+    /**
+     * Casts the list of {@link MagicSquareEntity} used in hibernate
+     * to list of {@link MagicSquare} used in all other cases.
+     *
+     * @param entities  List of {@link MagicSquareEntity}
+     * @return          List of {@link MagicSquare}
+     */
+    private List<MagicSquare> castList(List<MagicSquareEntity> entities) {
+        List<MagicSquare> squares = new ArrayList<>();
+        for (MagicSquareEntity entity : entities) {
+            squares.add(entity.createSquare());
+        }
+
+        return squares;
     }
 }

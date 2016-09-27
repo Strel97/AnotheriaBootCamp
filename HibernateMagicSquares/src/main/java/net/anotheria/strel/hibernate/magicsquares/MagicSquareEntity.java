@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table( name = "squares" )
-public class MagicSolutionEntity implements Serializable {
+public class MagicSquareEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "increment")
@@ -35,12 +35,16 @@ public class MagicSolutionEntity implements Serializable {
     private String  square;
 
 
-    public MagicSolutionEntity() {
+    public MagicSquareEntity() {
     }
 
-    public MagicSolutionEntity( int size, String square) {
+    public MagicSquareEntity(int size, String square) {
         this.size = size;
         this.square = square;
+    }
+
+    public MagicSquareEntity(MagicSquare square) {
+        this(square.getSize(), square.toString());
     }
 
     public int getId() {

@@ -29,8 +29,8 @@ public class HibernateLauncher {
         manager.deleteSquareById(1);
 
         //Finding square by pattern
-        for (MagicSquare square : manager.findSquares("2*")) {
-            System.out.printf("Found square: %s", square);
+        for (MagicSquare square : manager.findSquares("2%")) {
+            System.out.printf("Found square: %s\n", square);
         }
 
         // Retrieving solutions and printing them
